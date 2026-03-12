@@ -148,9 +148,9 @@ const FloatingShareButton = () => {
   );
 };
 
-
-const canvasRef = useRef(null);
-{
+// Matrix Background Component
+const MatrixBackground = () => {
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
