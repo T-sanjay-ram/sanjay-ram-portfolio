@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/sanjay-ram-portfolio/static/css/main.a5e7d75e.css",
-    "main.js": "/sanjay-ram-portfolio/static/js/main.f0842796.js",
+    "main.js": "/sanjay-ram-portfolio/static/js/main.67cdfb6a.js",
     "index.html": "/sanjay-ram-portfolio/index.html",
     "main.a5e7d75e.css.map": "/sanjay-ram-portfolio/static/css/main.a5e7d75e.css.map",
-    "main.f0842796.js.map": "/sanjay-ram-portfolio/static/js/main.f0842796.js.map"
+    "main.67cdfb6a.js.map": "/sanjay-ram-portfolio/static/js/main.67cdfb6a.js.map"
   },
   "entrypoints": [
     "static/css/main.a5e7d75e.css",
-    "static/js/main.f0842796.js"
+    "static/js/main.67cdfb6a.js"
   ]
 }
