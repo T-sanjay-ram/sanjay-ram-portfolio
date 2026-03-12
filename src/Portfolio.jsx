@@ -1,10 +1,156 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { Github, Linkedin, Mail, Twitter, Download, ExternalLink, ArrowDown, Code2, Database, GitBranch, Zap, Package, Terminal, Menu, X } from 'lucide-react';
+import { Github, Linkedin, Mail, Twitter, Download, ExternalLink, ArrowDown, Code2, Database, GitBranch, Zap, Package, Terminal, Menu, X, Share2, Copy, MessageCircle } from 'lucide-react';
 
-// Matrix Background Component
-const MatrixBackground = () => {
-  const canvasRef = useRef(null);
+// Floating Share Button
+const FloatingShareButton = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareTitle = 'Check out my developer portfolio!';
+
+  const shareOptions = [
+    {
+      name: 'Twitter',
+      icon: Twitter,
+      color: '#1DA1F2',
+      action: () => {
+        window.open(
+          `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`,
+          '_blank',
+          'width=550,height=420'
+        );
+      },
+    },
+    {
+      name: 'LinkedIn',
+      icon: Linkedin,
+      color: '#0A66C2',
+      action: () => {
+        window.open(
+          `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+          '_blank',
+          'width=550,height=420'
+        );
+      },
+    },
+    {
+      name: 'WhatsApp',
+      icon: MessageCircle,
+      color: '#25D366',
+      action: () => {
+        window.open(
+          `https://wa.me/?text=${encodeURIComponent(shareTitle + ' ' + shareUrl)}`,
+          '_blank'
+        );
+      },
+    },
+    {
+      name: 'Email',
+      icon: Mail,
+      color: '#EA4335',
+      action: () => {
+        window.location.href = `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareUrl)}`;
+      },
+    },
+    {
+      name: 'Copy Link',
+      icon: Copy,
+      color: '#00FF41',
+      action: () => {
+        navigator.clipboard.writeText(shareUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      },
+    },
+  ];
+
+  return (
+    <motion.div
+      className="fixed right-6 bottom-6 z-40"
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 1 }}
+    >
+      {/* Share Menu */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={isOpen ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+        transition={{ duration: 0.3 }}
+        className="absolute bottom-24 right-0 flex flex-col gap-3"
+      >
+        {shareOptions.map((option, idx) => (
+          <motion.button
+            key={idx}
+            initial={{ opacity: 0, y: 10 }}
+            animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+            transition={{ delay: idx * 0.05 }}
+            onClick={() => {
+              option.action();
+              setIsOpen(false);
+            }}
+            className="group relative"
+            title={option.name}
+          >
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-3 rounded-full backdrop-blur-md bg-black/40 border border-white/20 text-white hover:border-white/40 transition-all duration-300 flex items-center justify-center"
+              style={{ width: 45, height: 45 }}
+            >
+              <option.icon size={20} style={{ color: option.color }} />
+            </motion.div>
+            
+            {/* Tooltip */}
+            <motion.div
+              initial={{ opacity: 0, x: 10 }}
+              whileHover={{ opacity: 1, x: 0 }}
+              className="absolute right-full mr-3 px-2 py-1 bg-black/80 text-white text-xs rounded whitespace-nowrap pointer-events-none"
+            >
+              {copied && option.name === 'Copy Link' ? '✓ Copied!' : option.name}
+            </motion.div>
+          </motion.button>
+        ))}
+      </motion.div>
+
+      {/* Main Share Button */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setIsOpen(!isOpen)}
+        className="p-4 rounded-full backdrop-blur-md bg-gradient-to-br from-green-400/30 to-cyan-400/20 border border-green-400/50 text-green-400 hover:border-green-400 hover:bg-green-400/40 transition-all duration-300 shadow-lg hover:shadow-green-400/50 group relative"
+      >
+        <motion.div
+          animate={isOpen ? { rotate: 45 } : { rotate: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Share2 size={24} />
+        </motion.div>
+
+        {/* Glow effect */}
+        <motion.div
+          className="absolute inset-0 rounded-full bg-green-400/20 blur-lg"
+          animate={isOpen ? { scale: 1.2, opacity: 0.8 } : { scale: 1, opacity: 0.5 }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* Tooltip */}
+        <motion.div
+          initial={{ opacity: 0, x: 10 }}
+          whileHover={{ opacity: 1, x: 0 }}
+          className="absolute right-full mr-3 px-3 py-1 bg-black/80 text-white text-xs rounded whitespace-nowrap pointer-events-none font-semibold"
+        >
+          Share Portfolio
+        </motion.div>
+      </motion.button>
+    </motion.div>
+  );
+};
+
+
+const canvasRef = useRef(null);
+{
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -203,7 +349,7 @@ const HeroSection = () => {
               <div className="w-full h-full flex flex-col items-center justify-center relative z-10">
                 {/* ADD YOUR PHOTO HERE - Replace with your image path */}
                 <img
-                  src="./sanjay.png"
+                  src="/sanjay.png"
                   alt="Profile"
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -312,7 +458,7 @@ const HeroSection = () => {
                 rel="noopener noreferrer"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.1 + idx * 0.1 }}
+                transition={{ duration: 0.4, delay: 0.7 + idx * 0.1 }}
                 whileHover={{ scale: 1.3, rotate: 360, boxShadow: '0 0 25px rgba(0, 255, 65, 0.8)' }}
                 whileTap={{ scale: 0.9 }}
                 className="p-3 rounded-lg backdrop-blur-md bg-green-400/10 border border-green-400/30 text-green-400 hover:text-green-300 transition-all duration-300"
@@ -912,6 +1058,9 @@ export default function Portfolio() {
 
       <MatrixBackground />
       <div className="fixed inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80 pointer-events-none z-[1]" />
+
+      {/* Floating Share Button */}
+      <FloatingShareButton />
 
       {/* Responsive Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/40 border-b border-white/10">
