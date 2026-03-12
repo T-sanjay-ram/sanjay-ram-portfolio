@@ -203,7 +203,7 @@ const HeroSection = () => {
               <div className="w-full h-full flex flex-col items-center justify-center relative z-10">
                 {/* ADD YOUR PHOTO HERE - Replace with your image path */}
                 <img
-                  src="/sanjay.png"
+                  src="./sanjay.png"
                   alt="Profile"
                   className="w-full h-full object-cover"
                   onError={(e) => {
